@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Aguas.Data.Entities
 {
     public class Contract : IEntity
     {
+        [Key]
         public int Id { get; set; }
 
         public int ClientId { get; set; }

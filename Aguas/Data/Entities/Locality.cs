@@ -1,7 +1,10 @@
-﻿namespace Aguas.Data.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Aguas.Data.Entities
 {
     public class Locality : IEntity
     {
+        [Key]
         public int Id { get; set; }
 
         public string Address { get; set; }

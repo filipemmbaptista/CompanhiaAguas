@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Aguas.Data.Entities
 {
     public class Invoice : IEntity
     {
+        [Key]
         public int Id { get; set; }
 
         public int ContractId { get; set; }
