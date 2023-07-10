@@ -1,5 +1,6 @@
 using Aguas.Data;
 using Aguas.Data.Entities;
+using Aguas.Data.Repositories;
 using Aguas.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,6 +47,7 @@ namespace Aguas
 
             services.AddTransient<SeedDB>();
             services.AddScoped<IUserHelper, UserHelper>();
+            services.AddScoped<IContractTypeRepository, ContractTypeRepository>();
 
             services.AddControllersWithViews();
         }
