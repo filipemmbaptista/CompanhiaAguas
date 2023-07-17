@@ -1,10 +1,11 @@
 ﻿using Aguas.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aguas.Data
 {
-    public class DataContext : IdentityDbContext<User>
+    public class DataContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public DbSet<Client> Clients { get; set; }
 
@@ -21,5 +22,13 @@ namespace Aguas.Data
         public DbSet<Worker> Workers { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=Aguas;Integrated Security=True");
+            }
+        }
     }
 }
