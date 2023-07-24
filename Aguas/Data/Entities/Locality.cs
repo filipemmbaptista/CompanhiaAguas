@@ -15,10 +15,10 @@ namespace Aguas.Data.Entities
 
         public int ContractId { get; set; }
 
-        public Contract Contract { get; set; }
+        public Contract? Contract { get; set; }
         
         public int MeterId { get; set; }
 
-        public Meter Meter { get; set; }
+        public Meter? Meter { get; set; }
     }
 }

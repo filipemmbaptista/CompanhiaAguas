@@ -27,6 +27,7 @@ namespace Aguas.Data
             {
                 AddContractType("Private");
                 AddContractType("Enterprise");
+                await _context.SaveChangesAsync();
             }
         }
 

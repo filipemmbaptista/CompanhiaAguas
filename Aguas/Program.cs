@@ -1,5 +1,7 @@
+using Aguas.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,7 +15,22 @@ namespace Aguas
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            //create host
+            var host = CreateHostBuilder(args).Build();
+            //run method for seeding db
+            RunSeeding(host);
+            host.Run();
+        }
+
+        private static void RunSeeding(IHost host)
+        {
+            //create service
+            var scopeFactory = host.Services.GetService<IServiceScopeFactory>();
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var seeder = scope.ServiceProvider.GetService<SeedDB>();
+                seeder.SeedAsync().Wait();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

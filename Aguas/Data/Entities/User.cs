@@ -2,7 +2,7 @@
 
 namespace Aguas.Data.Entities
 {
-    public class User : IdentityUser<int>, IEntity
+    public class User : IdentityUser
     {
         public enum AccountStatus
         {

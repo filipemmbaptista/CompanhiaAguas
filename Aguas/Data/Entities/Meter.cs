@@ -20,6 +20,6 @@ namespace Aguas.Data.Entities
 
         public MeterStatus Status { get; set; }
 
-        public List<Locality> Locality { get; set; } = new List<Locality>();
+        public List<Locality>? Locality { get; set; } = new List<Locality>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Aguas.Data.Entities
 {
@@ -9,5 +10,7 @@ namespace Aguas.Data.Entities
 
         [Required]
         public string Type { get; set; }
+
+        public List<Contract>? Contracts { get; set; } = new List<Contract>();
     }
 }
