@@ -11,8 +11,6 @@ namespace Aguas.Data.Entities
 
         public int ClientId { get; set; }
 
-        public Client Client { get; set; }
-
         public int TypeId { get; set; }
 
         public ContractType Type { get; set; }

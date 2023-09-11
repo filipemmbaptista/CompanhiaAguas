@@ -13,15 +13,16 @@ namespace Aguas.Models
         public string LastName { get; set; }
 
         [Required]
-        [DataType(DataType.EmailAddress)] //tipo de dados para username
-        public string Username { get; set; }
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
 
         [Required]
-        [MinLength(6)]
-        public string Password { get; set; }
+        [Display(Name = "Fiscal Number")]
+        public int FiscalNumber { get; set; }
 
         [Required]
-        [Compare("Password")]
-        public string Confirm { get; set;}
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
     }
 }

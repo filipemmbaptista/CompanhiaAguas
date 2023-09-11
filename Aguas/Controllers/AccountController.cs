@@ -21,7 +21,7 @@ namespace Aguas.Controllers
         {
             if (User.Identity.IsAuthenticated) 
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
             return View();
@@ -30,17 +30,29 @@ namespace Aguas.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            var user = await _userHelper.GetUserByEmailAsync(model.Username);
+            if (user != null)
             {
-                var result = await _userHelper.LoginAsync(model);
-                if (result.Succeeded)
+                if (user.AdminAproved)
                 {
-                    if (this.Request.Query.Keys.Contains("ReturnUrl"))
+                    if (ModelState.IsValid)
                     {
-                        return Redirect(this.Request.Query["ReturnUrl"].First());
-                    }
+                        var result = await _userHelper.LoginAsync(model);
+                        if (result.Succeeded)
+                        {
+                            if (this.Request.Query.Keys.Contains("ReturnUrl"))
+                            {
+                                return Redirect(this.Request.Query["ReturnUrl"].First());
+                            }
 
-                    return this.RedirectToAction("Index", "Home");
+                            return this.RedirectToAction("Index", "Home");
+                        }
+                    }
+                }
+                else
+                {
+                    this.ModelState.AddModelError(string.Empty, "Waiting Aproval");
+                    return View(model);
                 }
             }
 
@@ -65,42 +77,39 @@ namespace Aguas.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userHelper.GetUserByEmailAsync(model.Username);
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
                 if (user == null)
                 {
-                    user = new User 
+                    user = new User
                     {
+                        Email = model.Email,
                         FirstName = model.FirstName,
                         LastName = model.LastName,
-                        Email = model.Username,
-                        UserName = model.Username
+                        FiscalNumber = model.FiscalNumber,
+                        PhoneNumber = model.PhoneNumber,
+                        UserName = model.Email,
+                        WorkerAproved = false,
+                        AdminAproved = false
                     };
 
-                    var result = await _userHelper.AddUserAsync(user, model.Password);
-                    if(result != IdentityResult.Success)
+                    var result = await _userHelper.AddUserNoPasswordAsync(user);
+                    if (result != IdentityResult.Success)
                     {
                         ModelState.AddModelError(string.Empty, "The user couldn't be created.");
                         return View(model);
                     }
 
-                    var loginViewModel = new LoginViewModel
-                    {
-                        Password = model.Password,
-                        RememberMe = false,
-                        Username = model.Username
-                    };
+                    await _userHelper.AddUserToRoleAsync(user, "Client");
+                }
 
-                    var result2 = await _userHelper.LoginAsync(loginViewModel);
-
-                    if (result2.Succeeded)
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-
-                    ModelState.AddModelError(string.Empty, "The user couldn't be logged.");
+                var isInRole = await _userHelper.IsUserInRoleAsync(user, "Client");
+                if (!isInRole)
+                {
+                    await _userHelper.AddUserToRoleAsync(user, "Client");
                 }
             }
-            return View(model);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

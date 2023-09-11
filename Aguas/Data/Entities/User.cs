@@ -1,41 +1,24 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace Aguas.Data.Entities
 {
     public class User : IdentityUser
     {
-        public enum AccountStatus
-        {
-            Pending,
-            Terminated,
-            Approved
-        };
-
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        [Display(Name = "Fiscal Number")]
         public int FiscalNumber { get; set; }
 
-        public int ContactNumber { get; set; }
+        [Display(Name = "Worker Aproved")]
+        public bool WorkerAproved { get; set; }
 
-        public string ContactEmail { get; set; }
-
-        public string ProfilePicUrl { get; set; }
-
-        public AccountStatus Status { get; set; }
-
-        public string ProfilePicFullPath
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(ProfilePicUrl))
-                {
-                    return null;
-                }
-
-                return $"https://localhost:44316/{ProfilePicUrl.Substring(1)}";
-            }
-        }
+        [Display(Name = "Admin Aproved")]
+        public bool AdminAproved { get; set; }
     }
 }

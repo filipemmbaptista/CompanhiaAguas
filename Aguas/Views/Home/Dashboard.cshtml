@@ -1,0 +1,17 @@
+﻿@model Aguas.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+@if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+{
+        <partial name="Dashboards/AdminDashboard" for="AdminDashboard" />
+}
+else if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Worker"))
+{
+        <partial name="Dashboards/WorkerDashboard" for="WorkerDashboard" />
+}
+else if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Client"))
+{
+        <partial name="Dashboards/ClientDashboard" for="ClientDashboard" />
+}
